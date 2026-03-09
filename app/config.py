@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     # Langfuse
     langfuse_secret_key: str = ""
     langfuse_public_key: str = ""
-    langfuse_host: str = ""
+    langfuse_base_url: str = ""
 
     # Webhook URLs (n8n)
     webhook_notify_advisor_url: str = ""

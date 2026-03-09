@@ -22,6 +22,8 @@ async def get_contact(contact_id: str) -> dict | None:
         .maybe_single()
         .execute()
     )
+    if result is None:
+        return None
     return result.data
 
 
