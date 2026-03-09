@@ -19,14 +19,19 @@ async def send_payment_link(
         program: Program name (e.g. "diplomado", "curso_30h", "seminario")
         contact_name: Contact's name for the payment reference
     """
-    async with httpx.AsyncClient(timeout=10) as client:
-        response = await client.post(
-            settings.webhook_send_payment_url,
-            json={
-                "contact_id": contact_id,
-                "program": program,
-                "contact_name": contact_name,
-            },
-        )
-        response.raise_for_status()
-    return f"Link de pago para '{program}' enviado"
+    if not settings.webhook_send_payment_url or "example.com" in settings.webhook_send_payment_url:
+        return "Error: webhook de pago no configurado. Un asesor enviará el link manualmente."
+    try:
+        async with httpx.AsyncClient(timeout=10) as client:
+            response = await client.post(
+                settings.webhook_send_payment_url,
+                json={
+                    "contact_id": contact_id,
+                    "program": program,
+                    "contact_name": contact_name,
+                },
+            )
+            response.raise_for_status()
+        return f"Link de pago para '{program}' enviado"
+    except Exception as e:
+        return f"Error al enviar link de pago: {e}. Un asesor lo enviará manualmente."

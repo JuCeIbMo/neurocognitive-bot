@@ -26,15 +26,20 @@ async def notify_advisor(
         user_type: lead, student, or patient
         context: Brief summary of what happened and why escalation is needed
     """
-    async with httpx.AsyncClient(timeout=10) as client:
-        response = await client.post(
-            settings.webhook_notify_advisor_url,
-            json={
-                "contact_id": contact_id,
-                "contact_name": contact_name,
-                "user_type": user_type,
-                "context": context,
-            },
-        )
-        response.raise_for_status()
-    return f"Asesor notificado para {contact_name}"
+    if not settings.webhook_notify_advisor_url or "example.com" in settings.webhook_notify_advisor_url:
+        return "Error: webhook de asesor no configurado. La notificación deberá hacerse manualmente."
+    try:
+        async with httpx.AsyncClient(timeout=10) as client:
+            response = await client.post(
+                settings.webhook_notify_advisor_url,
+                json={
+                    "contact_id": contact_id,
+                    "contact_name": contact_name,
+                    "user_type": user_type,
+                    "context": context,
+                },
+            )
+            response.raise_for_status()
+        return f"Asesor notificado para {contact_name}"
+    except Exception as e:
+        return f"Error al notificar asesor: {e}. La notificación deberá hacerse manualmente."
