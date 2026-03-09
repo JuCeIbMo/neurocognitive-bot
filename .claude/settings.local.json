@@ -17,7 +17,18 @@
       "Bash(uv run python -c \"from langfuse import CallbackHandler; print\\(''OK''\\)\")",
       "Bash(uv run python -c \"from langfuse.langchain import CallbackHandler; print\\(''OK''\\)\")",
       "Bash(uv run python -c \"import langfuse; print\\([x for x in dir\\(langfuse\\) if ''callback'' in x.lower\\(\\) or ''handler'' in x.lower\\(\\)]\\)\")",
-      "Bash(uv run pytest tests/ -v)"
+      "Bash(uv run pytest tests/ -v)",
+      "Bash(uv run python -c \"from app.main import app; print\\(''Import OK''\\)\")",
+      "Bash(git add app/db/checkpointer.py)",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(curl -s https://stroke-neurocognitive-bot.kdyuts.easypanel.host/health)",
+      "Bash(curl -s -X POST https://stroke-neurocognitive-bot.kdyuts.easypanel.host/webhook/message/sync -H \"Content-Type: application/json\" -d '{\"\"contact_id\"\": \"\"test-001\"\", \"\"contact_name\"\": \"\"Julio Test\"\", \"\"message_text\"\": \"\"Hola, me interesa saber más sobre sus programas\"\", \"\"message_type\"\": \"\"text\"\"}')",
+      "Bash(curl -s -X POST https://stroke-neurocognitive-bot.kdyuts.easypanel.host/webhook/message/sync -H \"Content-Type: application/json\" -d \"{\"\"contact_id\"\": \"\"test-001\"\", \"\"contact_name\"\": \"\"Julio Test\"\", \"\"message_text\"\": \"\"Hola, me interesa saber mas sobre sus programas\"\", \"\"message_type\"\": \"\"text\"\"}\")",
+      "Bash(uv run python -c \"import langfuse; print\\(langfuse.__version__\\)\")",
+      "Bash(uv run python -c \"import langfuse; from langfuse.langchain import CallbackHandler; help\\(CallbackHandler.__init__\\)\")",
+      "Bash(uv run python -c \"from langfuse import Langfuse; import inspect; print\\(inspect.signature\\(Langfuse.__init__\\)\\)\")",
+      "Bash(uv run python -c \"from app.observability.langfuse_setup import get_langfuse_handler; print\\(''OK''\\)\")"
     ]
   },
   "enabledPlugins": {}
