@@ -19,7 +19,8 @@ async def get_checkpointer() -> AsyncGenerator[AsyncPostgresSaver, None]:
     """
     conn = await AsyncConnection.connect(
         settings.supabase_db_url,
-        prepare_threshold=0,
+        autocommit=True,
+        prepare_threshold=None,
     )
     checkpointer = AsyncPostgresSaver(conn)
     try:
