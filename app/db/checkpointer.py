@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
+from psycopg import AsyncConnection
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 
 from app.config import settings
@@ -12,7 +13,17 @@ async def get_checkpointer() -> AsyncGenerator[AsyncPostgresSaver, None]:
 
     This persists graph state (messages, flags, phase) across conversation turns.
     Uses the Supabase PostgreSQL connection directly.
+
+    prepare_threshold=0 disables prepared statements, required for
+    Supabase's PgBouncer (transaction pooling mode).
     """
-    async with AsyncPostgresSaver.from_conn_string(settings.supabase_db_url) as checkpointer:
+    conn = await AsyncConnection.connect(
+        settings.supabase_db_url,
+        prepare_threshold=0,
+    )
+    checkpointer = AsyncPostgresSaver(conn)
+    try:
         await checkpointer.setup()
         yield checkpointer
+    finally:
+        await conn.close()
