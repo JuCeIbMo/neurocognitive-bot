@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uv init --name neurocognitive-bot --python 3.12)",
+      "Bash(uv sync)",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "mcp__plugin_context7_context7__query-docs",
+      "Bash(uv run python -c \"from app.models.state import ConversationState; print\\(''state OK''\\)\")",
+      "Bash(uv run python -c \"from app.models.webhook import IncomingMessage; print\\(''webhook OK''\\)\")",
+      "Bash(uv run python -c \"from app.models.contact import UserType, LeadPhase; print\\(''contact OK''\\)\")",
+      "Bash(uv run python -c \"from app.prompts.composer import compose_system_prompt; print\\(''composer OK''\\)\")",
+      "Bash(uv run python -c \"from app.graph.main_graph import build_main_graph; print\\(''main graph OK''\\)\")",
+      "Bash(uv run python -c \":*)",
+      "Bash(uv run pytest tests/test_transitions.py tests/test_buffer.py -v)",
+      "Bash(uv run pytest tests/test_api.py -v)",
+      "Bash(uv run python -c \"import langfuse; print\\(dir\\(langfuse\\)\\)\")",
+      "Bash(uv run python -c \"from langfuse import CallbackHandler; print\\(''OK''\\)\")",
+      "Bash(uv run python -c \"from langfuse.langchain import CallbackHandler; print\\(''OK''\\)\")",
+      "Bash(uv run python -c \"import langfuse; print\\([x for x in dir\\(langfuse\\) if ''callback'' in x.lower\\(\\) or ''handler'' in x.lower\\(\\)]\\)\")",
+      "Bash(uv run pytest tests/ -v)"
+    ]
+  },
+  "enabledPlugins": {}
+}
