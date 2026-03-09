@@ -16,22 +16,21 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    checkpointer = await get_checkpointer()
-    graph = build_main_graph().compile(checkpointer=checkpointer)
+    async with get_checkpointer() as checkpointer:
+        graph = build_main_graph().compile(checkpointer=checkpointer)
 
-    app.state.graph = graph
-    app.state.checkpointer = checkpointer
-    app.state.buffer = MessageBuffer()
+        app.state.graph = graph
+        app.state.checkpointer = checkpointer
+        app.state.buffer = MessageBuffer()
 
-    # Wire the buffer to process messages through the graph
-    async def on_buffer_flush(contact_id: str, combined_message: str):
-        await _process_message(app, contact_id, combined_message)
+        # Wire the buffer to process messages through the graph
+        async def on_buffer_flush(contact_id: str, combined_message: str):
+            await _process_message(app, contact_id, combined_message)
 
-    app.state.buffer.set_callback(on_buffer_flush)
+        app.state.buffer.set_callback(on_buffer_flush)
 
-    yield
-    await app.state.buffer.flush_all()
-    await checkpointer.close()
+        yield
+        await app.state.buffer.flush_all()
 
 
 app = FastAPI(title="Neurocognitive Bot", lifespan=lifespan)
